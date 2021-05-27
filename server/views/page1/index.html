@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gangs in Chicago</title>
+    <% if (env === "production") { %>
+    <link rel="stylesheet" href="/page1/index.css">
+    <% } %>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+    <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
+    <script type="text/javascript" src="/page1/../common/kdeRenderer.js"></script>
+    <script type='text/javascript' charset='utf-8' src='/page1/../common/three.min.js'></script>
+
+    <!-- Include Twitter Bootstrap and jQuery: -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+
+
+    <!-- Include the plugin's CSS and JS: -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css"
+        type="text/css" />
+
+</head>
+
+<body>
+    <div class="section" , id="container">
+        <div id="leftPart">
+            <div class="section" , id="mergeTreeDiv">
+                <h7>Merge Tree</h7>
+                <div class="levelandcrownDiv levelDiv" style="display: none;">
+                    Level <input type="textBox" class="form-control textBox" id="level" value="0.7">
+                </div>
+                <div class="levelandcrownDiv crownDiv" style="display: none;">
+                    Crown <input type="textBox" class="form-control textBox" id="crown" value="0.42">
+                </div>
+            </div>
+            <div class="section" , id="diagramDiv">
+                <h7>Persistence Diagram</h7>
+            </div>
+        </div>
+        <div id="rightPart">
+            <div class="section" , id="mapView">
+                <div class="divonMap" , id="horizontalDiv">
+                    Type:
+                    <select name="mtResult" id="typeDropDown">
+                        <option value="SuperLevel">SuperLevel</option>
+                        <option value="LeafComponent">LeafComponent</option>
+                        <option value="CrownComponent">CrownComponent</option>
+                        <option value="MorseComplex">MorseComplex</option>
+                        <option value="MorseComplex_SuperLevel">MorseComplex + SuperLevel</option>
+                        <option value="MorseComplex_CrownComponent" selected="true">MorseComplex + CrownComponent</option>
+                    </select>
+                    Opacity:
+                    <input type="textBox" class="form-control textBox" id="opacity" aria-describedby="opacity"
+                        value="0.7">
+                    Contours:
+                    <input type="textBox" class="form-control textBox" id="contours" aria-describedby="contours"
+                        value="10">
+                </div>
+                <div class="divonMap" , id="configuration">
+                    <div class="paraDiv">
+                        <h11>Bandwidth:</h11>
+                        <input type="textBox" class="form-control textBox" id="bandwidth" aria-describedby="bandwidth"
+                            value="0.01">
+                    </div>
+                    <div class="paraDiv special">
+                        <span>ResolutionX:</span>
+                        <input type="textBox" class="form-control textBox" id="resolutionX"
+                            aria-describedby="resolutionX" value="1024">
+                        <span>ResolutionY:</span>
+                        <input type="textBox" class="form-control textBox" id="resolutionY"
+                            aria-describedby="resolutionX" value="1024">
+                    </div>
+                    <div class="paraDiv">
+                        <h11>Kernal Function:</h11>
+                        <select name="kernals" id="kernalDropDown">
+                            <option value="Gaussian">Gaussian</option>
+                            <option value="Linear" selected="true">Linear</option>
+                            <option value="Epanechnikov">Epanechnikov</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-success" id="submitButton">Submit</button>
+                </div>
+            </div>
+            <div class="divonMap" , id="config4Pie">
+                <div class="div4pieconfig">
+                    <h11>TopN Categories on Pie:</h11>
+                    <div class="slidecontainer">
+                        <input type="range" min="2" max="20" value="2" class="slider" id="myRange">
+                    </div>
+                </div>
+                <div class="div4pieconfig">
+                    <h11>Color hotspots by</h11>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radio4pie" id="branchidRadio"
+                            value="option1" >
+                        <label class="form-check-label" for="branchidRadio">
+                            BranchID
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radio4pie" id="catColorRadio"
+                            value="option2" checked>
+                        <label class="form-check-label" for="catColorRadio">
+                            Top
+                            <input type="textBox" class="form-control textBox" id="ithCat" aria-describedby="ithCat"
+                                value=1> category
+                        </label>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="section" , id="curveDiv">
+                <h7>Persistence Curve </h7>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/page1/bundle.js"></script>
+    <% if (env !== "production" && reload === true) { %>
+    <script src="/reload/reload.js"></script>
+    <% } %>
+</body>
+
+</html>
