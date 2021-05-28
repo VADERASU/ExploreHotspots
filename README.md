@@ -17,7 +17,7 @@ Please download them at https://drive.google.com/drive/folders/1tHXvn3ST2t3f97kl
 3> Load the state of TTK to run the system(Middleware and Backend). The states(ttkState4ChicagoData.pvsm and ttkState4PurdueData.pvsm) are downloaded at google drive: https://drive.google.com/drive/folders/1tHXvn3ST2t3f97kl5Y1D3JmvJeWofJ6j?usp=sharing
 
 ## Demo of case study
-<a href="https://youtu.be/qUTTGwqafeI" target="_blank">Demo Video</a> provides two cases to introduce the usage of the system. 
+<a href="https://youtu.be/qUTTGwqafeI" target="_blank">Demo Video</a> provides Purdue general crime data case to introduce the usage of the system. 
 
 ## Contact Us
 If have any problem when install or run the system, please contact us at rzhan100@asu.edu.
